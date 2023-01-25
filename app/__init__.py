@@ -21,7 +21,7 @@ def create_app(config=None):
         app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_TEST_DATABASE_URI")
 
     # Import models here for Alembic setup
-    from app.models.adie import Adie
+    from app.models.black_adie import Black_Adie
     from app.models.event import Event
 
     db.init_app(app)
@@ -29,10 +29,10 @@ def create_app(config=None):
 
     # Register Blueprints here
     # from .routes import example_bp
-    from .adie_routes import adie_bp
+    from .black_adie_routes import black_adies_bp
     from .event_routes import event_bp
-    app.register_blueprint(adie_bp)
-    app.register_blueprint(event_bp)
+    app.register_blueprint(black_adies_bp)
+    app.register_blueprint(events_bp)
 
     CORS(app)
     return app
