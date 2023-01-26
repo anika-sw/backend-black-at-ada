@@ -7,8 +7,9 @@ class User(db.Model):
     cohort = db.Column(db.String) #need to make sure to control for case
     location = db.Column(db.String)
     email = db.Column(db.String)
-    # goal_id = db.Column(db.Integer, db.ForeignKey('goal.id'), nullable=True)
-    # goal = db.relationship("Goal", back_populates="tasks")
+    password = db.Column #look up password type in Flask db
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=True)
+    event = db.relationship("Event", back_populates="users")
 
 
     def to_dict(self):
@@ -18,7 +19,8 @@ class User(db.Model):
             "last_name": self.last_name,
             "cohort": self.cohort,
             "location": self.location,
-            "email": self.email
+            "email": self.email,
+            "password": self.password
         }
 
     @classmethod
@@ -28,5 +30,6 @@ class User(db.Model):
             last_name=data["last_name"],
             cohort=data["cohort"],
             location=data["location"],
-            email=data["email"]
+            email=data["email"],
+            password=data["password"]
         )

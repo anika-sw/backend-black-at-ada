@@ -4,14 +4,14 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String) #limit characters
     description = db.Column(db.String) #limit characters
-    date = db.Column # are date and time one column? make sure local to calendar viewer; must be aware
-    time = db.Column # are date and time one column? make sure local to calendar viewer; must be aware
+    # date = db.Column # are date and time one column? make sure local to calendar viewer; must be aware
+    # time = db.Column # are date and time one column? make sure local to calendar viewer; must be aware
     location = db.Column(db.String) #need to make sure to control for case
     organizer_first_name = db.Column(db.String) #need to make sure to control for case
     organizer_last_name = db.Column(db.String) #need to make sure to control for case
     organizer_email = db.Column(db.String) #need to make sure to control for case
     target_audience = db.Column(db.String)
-    attendees = db.relationship("User", back_populates="event", lazy=True)
+    users = db.relationship("User", back_populates="event", lazy=True)
 
 
     def to_dict(self):
