@@ -55,7 +55,7 @@ def read_all_events():
 
 @events_bp.route("/<event_id>", methods=["GET"])
 def read_one_event(event_id):
-    event = validate_model_id(event, event_id)
+    event = validate_model_id(Event, event_id)
     event_response = {
         "event": event.to_dict()
     }
@@ -67,8 +67,8 @@ def update_event_entire_entry(event_id):
     request_body = request.get_json()
     event.title = request_body["title"]
     event.description = request_body["description"]
-    event.date = request_body["date"]
-    event.time = request_body["time"]
+    # event.date = request_body["date"]
+    # event.time = request_body["time"]
     event.location = request_body["location"]
     event.organizer_first_name = request_body["organizer_first_name"]
     event.organizer_last_name = request_body["organizer_last_name"]
@@ -88,8 +88,8 @@ def update_event_partial_entry(event_id):
     request_body = request.get_json()
     event.title = request_body["title"]
     event.description = request_body["description"]
-    event.date = request_body["date"]
-    event.time = request_body["time"]
+    # event.date = request_body["date"]
+    # event.time = request_body["time"]
     event.location = request_body["location"]
     event.organizer_first_name = request_body["organizer_first_name"]
     event.organizer_last_name = request_body["organizer_last_name"]

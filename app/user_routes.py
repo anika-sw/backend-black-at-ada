@@ -5,7 +5,7 @@ import requests
 from app.models.user import User
 from app.models.event import Event
 
-users_bp = Blueprint('users', __name__, url_prefix="/users")
+users_bp = Blueprint("users", __name__, url_prefix="/users")
 
 def validate_complete_request(request_body):
     try:
