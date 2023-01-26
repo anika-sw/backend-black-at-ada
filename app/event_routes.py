@@ -104,6 +104,39 @@ def update_event_partial_entry(event_id):
     }
     return make_response((event_response), 200)
 
+@events_bp.route("/<event_id>/users", methods=["POST"])
+def update_event_attendees(event_id):
+    event = validate_model_id(Event, event_id)
+    request_body = request.get_json()
+
+    for user_id in request_body["user_ids"]:
+        user = validate_model_id(user, user_id)
+        event.users.append(user)
+        db.session.commit()
+
+    event_response = {
+        "id": event.id,
+        "user_ids": request_body["user_ids"]
+    }
+    return make_response(jsonify(event_response), 200)
+
+
+@events_bp.route("/<event_id>/users", methods=["DELETE"]) #should this be delete or patch?
+def delete_event_attendee(event_id):
+    event = validate_model_id(Event, event_id)
+    request_body = request.get_json()
+
+    # for user_id in request_body["user_ids"]:
+    #     user = validate_model_id(user, user_id)
+    #     event.users.append(user)
+    #     db.session.commit()
+
+    # event_response = {
+    #     "id": event.id,
+    #     "user_ids": request_body["user_ids"]
+    # }
+    return make_response(jsonify(event_response), 200)
+
 
 @events_bp.route("/<event_id>", methods=["DELETE"])
 def event_delete(event_id):

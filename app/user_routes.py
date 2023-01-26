@@ -70,7 +70,7 @@ def update_user_entire_entry(user_id):
     user.cohort=request_body["cohort"]
     user.location=request_body["location"]
     user.email=request_body["email"]
-    user.email=request_body["password"]
+    user.password=request_body["password"]
 
     db.session.commit()
 
@@ -88,7 +88,7 @@ def update_user_partial_entry(user_id):
     user.cohort=request_body["cohort"],
     user.location=request_body["location"],
     user.email=request_body["email"]
-    user.email=request_body["password"]
+    user.password=request_body["password"]
 
     db.session.commit()
 
