@@ -63,7 +63,7 @@ def read_one_event(event_id):
 
 @events_bp.route("/<event_id>", methods=["PUT"])
 def update_event_entire_entry(event_id):
-    event = validate_model_id(event, event_id)
+    event = validate_model_id(Event, event_id)
     request_body = request.get_json()
     event.title = request_body["title"]
     event.description = request_body["description"]
@@ -82,27 +82,27 @@ def update_event_entire_entry(event_id):
     }
     return make_response((event_response), 200)
 
-@events_bp.route("/<event_id>", methods=["PATCH"])
-def update_event_partial_entry(event_id):
-    event = validate_model_id(event, event_id)
-    request_body = request.get_json()
-    event.title = request_body["title"]
-    event.description = request_body["description"]
-    # event.date = request_body["date"]
-    # event.time = request_body["time"]
-    event.location = request_body["location"]
-    event.organizer_first_name = request_body["organizer_first_name"]
-    event.organizer_last_name = request_body["organizer_last_name"]
-    event.organizer_email = request_body["organizer_email"]
-    event.target_audience = request_body["target_audience"]
-    event.attendees = request_body["attendees"]
+# @events_bp.route("/<event_id>", methods=["PATCH"])
+# def update_event_partial_entry(event_id):
+#     event = validate_model_id(event, event_id)
+#     request_body = request.get_json()
+#     event.title = request_body["title"]
+#     event.description = request_body["description"]
+#     # event.date = request_body["date"]
+#     # event.time = request_body["time"]
+#     event.location = request_body["location"]
+#     event.organizer_first_name = request_body["organizer_first_name"]
+#     event.organizer_last_name = request_body["organizer_last_name"]
+#     event.organizer_email = request_body["organizer_email"]
+#     event.target_audience = request_body["target_audience"]
+#     event.attendees = request_body["attendees"]
 
-    db.session.commit()
+#     db.session.commit()
 
-    event_response = {
-        "event": event.to_dict()
-    }
-    return make_response((event_response), 200)
+#     event_response = {
+#         "event": event.to_dict()
+#     }
+#     return make_response((event_response), 200)
 
 @events_bp.route("/<event_id>/users", methods=["POST"])
 def update_event_attendees(event_id):
@@ -110,7 +110,7 @@ def update_event_attendees(event_id):
     request_body = request.get_json()
 
     for user_id in request_body["user_ids"]:
-        user = validate_model_id(user, user_id)
+        user = validate_model_id(User, user_id)
         event.users.append(user)
         db.session.commit()
 
@@ -140,7 +140,7 @@ def delete_event_attendee(event_id):
 
 @events_bp.route("/<event_id>", methods=["DELETE"])
 def event_delete(event_id):
-    event = validate_model_id(event, event_id)
+    event = validate_model_id(Event, event_id)
 
     db.session.delete(event)
     db.session.commit()

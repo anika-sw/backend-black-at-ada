@@ -7,7 +7,7 @@ class User(db.Model):
     cohort = db.Column(db.String) #need to make sure to control for case
     location = db.Column(db.String)
     email = db.Column(db.String)
-    password = db.Column #look up password type in Flask db
+    password = db.Column (db.String) #look up password type in Flask db
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=True)
     event = db.relationship("Event", back_populates="users")
 

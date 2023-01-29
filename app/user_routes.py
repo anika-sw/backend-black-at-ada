@@ -79,23 +79,23 @@ def update_user_entire_entry(user_id):
     }
     return make_response((user_response), 200)
 
-@users_bp.route("/<user_id>", methods=["PATCH"])
-def update_user_partial_entry(user_id):
-    user = validate_model_id(User, user_id)
-    request_body = request.get_json()
-    user.first_name=request_body["first_name"],
-    user.last_name=request_body["last_name"],
-    user.cohort=request_body["cohort"],
-    user.location=request_body["location"],
-    user.email=request_body["email"]
-    user.password=request_body["password"]
+# @users_bp.route("/<user_id>", methods=["PATCH"])
+# def update_user_partial_entry(user_id):
+#     user = validate_model_id(User, user_id)
+#     request_body = request.get_json()
+#     user.first_name=request_body["first_name"]
+#     user.last_name=request_body["last_name"]
+#     user.cohort=request_body["cohort"]
+#     user.location=request_body["location"]
+#     user.email=request_body["email"]
+#     user.password=request_body["password"]
 
-    db.session.commit()
+#     db.session.commit()
 
-    user_response = {
-        "user": user.to_dict()
-    }
-    return make_response((user_response), 200)
+#     user_response = {
+#         "user": user.to_dict()
+#     }
+#     return make_response((user_response), 200)
 
 
 @users_bp.route("/<user_id>", methods=["DELETE"])

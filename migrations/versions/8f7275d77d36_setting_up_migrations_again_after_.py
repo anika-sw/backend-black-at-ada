@@ -1,8 +1,8 @@
-"""Initial setup of Event and User models, user_routes, and event_routes
+"""Setting up migrations again after deleting previous directory
 
-Revision ID: 7419001122c8
+Revision ID: 8f7275d77d36
 Revises: 
-Create Date: 2023-01-25 19:04:24.963108
+Create Date: 2023-01-26 10:11:33.733952
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7419001122c8'
+revision = '8f7275d77d36'
 down_revision = None
 branch_labels = None
 depends_on = None
