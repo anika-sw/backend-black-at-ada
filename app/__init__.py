@@ -23,6 +23,7 @@ def create_app(config=None):
     # Import models here for Alembic setup
     from app.models.user import User
     from app.models.event import Event
+    from app.models.event_user import EventUser
 
     db.init_app(app)
     migrate.init_app(app, db)

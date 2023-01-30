@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from flask import Blueprint, request, jsonify, make_response, abort
 from app import db
 import os
@@ -47,7 +48,33 @@ def create_user():
 
 @users_bp.route("", methods=["GET"])
 def read_all_users():
-    users = User.query.all()
+    user_query = User.query.order_by(User.first_name.asc())
+    sort_query = request.args.get("sort")
+    if sort_query == "lastName":
+        user_query = User.query.order_by(User.lastName.asc())
+    if sort_query == "cohort":
+        user_query = User.query.order_by(User.cohort.asc())
+    if sort_query == "nearMe":
+        user_query = User.db.session.query(User).filter(func.ST_DWithin(User.geoLoc, geo, meters)).order_by(func.ST_Distance(User.geoLoc, geo))
+
+    users = user_query
+
+    users_response = [user.to_dict() for user in users]
+
+    return make_response(jsonify(users_response), 200)
+
+@users_bp.route("", methods=["GET"])
+def read_users_near_one_user(user_id):
+    user = validate_model_id(User, user_id)
+    sort_query = request.args.get("sort")
+    # if sort_query == "nearMe":
+    #     user_query = User.query.filter(func.acos(func.sin(func.radians(user.location_lat)) 
+    #     * func.sin(func.radians(User.location_lat)) + func.cos(func.radians(user.location_lat)) 
+    #     * func.cos(func.radians(User.location_lat)) * func.cos(func.radians(User.location_lng) 
+    #     - (func.radians(user_id.location_lng)))) * 6371 <= 80)
+
+    users = user_query
+
     users_response = [user.to_dict() for user in users]
 
     return make_response(jsonify(users_response), 200)
@@ -68,9 +95,31 @@ def update_user_entire_entry(user_id):
     user.first_name=request_body["first_name"]
     user.last_name=request_body["last_name"]
     user.cohort=request_body["cohort"]
-    user.location=request_body["location"]
+    user.location_name=request_body["location"]
+    user.location_lat=request_body["location_lat"]
+    user.location_lng=request_body["location_lng"]
     user.email=request_body["email"]
     user.password=request_body["password"]
+    user.company=request_body["company"]
+    user.linkedin=request_body["linkedin"]
+    user.job_title=request_body["job_title"]
+    user.salary=request_body["salary"]
+    user.years_experience=request_body["years_experience"]
+    user.user_last_updated=request_body["user_last_updated"]
+
+    db.session.commit()
+
+    user_response = {
+        "user": user.to_dict()
+    }
+    return make_response((user_response), 200)
+    
+
+@users_bp.route("/<user_id>", methods=["PATCH"])
+def user_rsvp_yes(user_id):
+    user = validate_model_id(User, user_id)
+    request_body = request.get_json()
+    user.event_id += request_body["event_id"]
 
     db.session.commit()
 
@@ -79,23 +128,19 @@ def update_user_entire_entry(user_id):
     }
     return make_response((user_response), 200)
 
-# @users_bp.route("/<user_id>", methods=["PATCH"])
-# def update_user_partial_entry(user_id):
-#     user = validate_model_id(User, user_id)
-#     request_body = request.get_json()
-#     user.first_name=request_body["first_name"]
-#     user.last_name=request_body["last_name"]
-#     user.cohort=request_body["cohort"]
-#     user.location=request_body["location"]
-#     user.email=request_body["email"]
-#     user.password=request_body["password"]
 
-#     db.session.commit()
+@users_bp.route("/<user_id>", methods=["PATCH"])
+def user_rsvp_no(user_id):
+    user = validate_model_id(User, user_id)
+    request_body = request.get_json()
+    user.event_id -= request_body["event_id"]
 
-#     user_response = {
-#         "user": user.to_dict()
-#     }
-#     return make_response((user_response), 200)
+    db.session.commit()
+
+    user_response = {
+        "user": user.to_dict()
+    }
+    return make_response((user_response), 200)
 
 
 @users_bp.route("/<user_id>", methods=["DELETE"])
