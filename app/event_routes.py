@@ -4,6 +4,7 @@ import os
 import requests
 from app.models.user import User
 from app.models.event import Event
+from datetime import datetime
 
 events_bp = Blueprint('events', __name__, url_prefix="/events")
 

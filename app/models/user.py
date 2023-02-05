@@ -1,24 +1,39 @@
 from app import db
+from sqlalchemy.sql import func
+from flask_bcrypt import bcrypt
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-    first_name = db.Column(db.String, nullable=False) #need to make sure to control for case
-    last_name = db.Column(db.String, nullable=False) #need to make sure to control for case
-    cohort = db.Column(db.Integer, nullable=False) #need to make sure to control for case
+    first_name = db.Column(db.String, nullable=False)
+    last_name = db.Column(db.String, nullable=False) 
+    pronouns = db.Column(db.String, nullable=True)
+    cohort = db.Column(db.Integer, nullable=False) 
     location_name = db.Column(db.String, nullable=False)
-    location_lat = db.Column(db.Numeric(8,6), nullable=True)
-    location_lng = db.Column(db.Numeric(9,6), nullable=True)
+    location_lat = db.Column(db.String, nullable=True)
+    location_lng = db.Column(db.String, nullable=True)
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False) #look up password type in Flask db
+    # profile_pic = db.Column(db.Bytea, nullable=False)
     company = db.Column(db.String, nullable=True)
     linkedin = db.Column(db.String, nullable=True)
     job_title = db.Column(db.String, nullable=True)
     salary = db.Column(db.Integer, nullable=True)
-    years_experience = db.Column(db.Integer, nullable=True)
-    user_last_updated = db.Column(db.DateTime, nullable=False)
+    years_experience = db.Column(db.String, nullable=True)
+    include_name_salary = db.Column(db.String, nullable=False)
+    user_first_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    user_last_updated = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     events = db.relationship("Event", secondary="event_user", back_populates="users")
 
+    # def validate_email(self, email):
+    #     try:
+    #         if email not in 
 
+    # def on_get(self, request, response):
+    #     form = request.data
+    #     result = validate_email(User.objects.get(email=form["email"]))
+    #     try:
+
+    
     def to_dict(self):
         user_dict = {
             "id": self.id,
@@ -26,12 +41,19 @@ class User(db.Model):
             "last_name": self.last_name,
             "cohort": self.cohort,
             "location_name": self.location_name,
-            "location_lat": self.location_lat,
-            "location_lng": self.location_lng,
             "email": self.email,
             "password": self.password,
+            # "profile_pic": self.profile_pic,
+            "include_name_salary": self.include_name_salary,
+            "user_first_created": self.user_first_created,
             "user_last_updated": self.user_last_updated
         }
+        if self.pronouns:
+            user_dict["pronouns"] = self.pronouns
+        if self.location_lat:
+            user_dict["location_lat"] = self.location_lat
+        if self.location_lng:
+            user_dict["location_lng"] = self.location_lng
         if self.company:
             user_dict["company"] = self.company
         if self.linkedin:
@@ -52,15 +74,18 @@ class User(db.Model):
         return User(
             first_name=data["first_name"],
             last_name=data["last_name"],
+            pronouns=data["pronouns"],
             cohort=data["cohort"],
             location_name=data["location_name"],
             location_lat=data["location_lat"],
             location_lng=data["location_lng"],
             email=data["email"],
             password=data["password"],
+            # profile_pic=data["profile_pic"],
             company=data["company"],
             linkedin=data["linkedin"],
             job_title=data["job_title"],
             salary=data["salary"],
-            years_experience=data["years_experience"]
+            years_experience=data["years_experience"],
+            include_name_salary=data["include_name_salary"]
         )

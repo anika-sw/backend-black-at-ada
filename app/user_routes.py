@@ -5,16 +5,11 @@ import os
 import requests
 from app.models.user import User
 from app.models.event import Event
+from datetime import datetime
+# from app import bcrypt
+
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
-
-def validate_complete_request(request_body):
-    try:
-        if not "" in request_body:
-            return request_body
-
-    except:
-        abort(make_response({"details": "Invalid data"}, 400))
 
 
 def validate_model_id(cls, model_id):
@@ -31,31 +26,24 @@ def validate_model_id(cls, model_id):
     return model
 
 
-@users_bp.route("", methods=["POST"])
-def create_user():
-    request_body = request.get_json()
-    valid_data = validate_complete_request(request_body)
-    new_user = User.from_dict(valid_data)
-
-    db.session.add(new_user)
-    db.session.commit()
-
-    user_response = {
-        "user": new_user.to_dict()
-    }
-    return make_response(jsonify(user_response), 201)
-
-
 @users_bp.route("", methods=["GET"])
 def read_all_users():
     user_query = User.query.order_by(User.first_name.asc())
     sort_query = request.args.get("sort")
     if sort_query == "lastName":
-        user_query = User.query.order_by(User.lastName.asc())
+        user_query = User.query.order_by(User.last_name.asc(), User.first_name.asc())
     if sort_query == "cohort":
         user_query = User.query.order_by(User.cohort.asc())
-    if sort_query == "nearMe":
-        user_query = User.db.session.query(User).filter(func.ST_DWithin(User.geoLoc, geo, meters)).order_by(func.ST_Distance(User.geoLoc, geo))
+    if sort_query == "company":
+        user_query = User.query.order_by(User.company.asc())
+    if sort_query == "salaryAsc":
+        user_query = User.query.order_by(User.salary.asc())
+    if sort_query == "salaryDesc":
+        user_query = User.query.order_by(User.salary.desc())
+    if sort_query == "salaryCompany":
+        user_query = User.query.order_by(User.company.asc())
+    # if sort_query == "nearMe":
+    #     user_query = User.db.session.query(User).filter(func.ST_DWithin(User.geoLoc, geo, meters)).order_by(func.ST_Distance(User.geoLoc, geo))
 
     users = user_query
 
@@ -94,6 +82,7 @@ def update_user_entire_entry(user_id):
     request_body = request.get_json()
     user.first_name=request_body["first_name"]
     user.last_name=request_body["last_name"]
+    user.pronouns=request_body["pronouns"]
     user.cohort=request_body["cohort"]
     user.location_name=request_body["location"]
     user.location_lat=request_body["location_lat"]
@@ -105,6 +94,7 @@ def update_user_entire_entry(user_id):
     user.job_title=request_body["job_title"]
     user.salary=request_body["salary"]
     user.years_experience=request_body["years_experience"]
+    user.include_name_salary=request_body["include_name_salary"]
     user.user_last_updated=request_body["user_last_updated"]
 
     db.session.commit()

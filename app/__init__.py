@@ -1,9 +1,11 @@
-from flask import Flask
+from flask import Flask, request, jsonify, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 import os
 from flask_cors import CORS
+import requests
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -32,8 +34,12 @@ def create_app(config=None):
     # from .routes import example_bp
     from .user_routes import users_bp
     from .event_routes import events_bp
+    from .auth_routes import auth_bp
     app.register_blueprint(users_bp)
     app.register_blueprint(events_bp)
+    app.register_blueprint(auth_bp)
 
     CORS(app)
     return app
+
+
