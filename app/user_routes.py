@@ -76,26 +76,36 @@ def read_one_user(user_id):
     }
     return make_response(jsonify(user_response), 200)
 
-@users_bp.route("/<user_id>", methods=["PUT"])
+@users_bp.route("/<user_id>", methods=["PATCH"])
 def update_user_entire_entry(user_id):
     user = validate_model_id(User, user_id)
     request_body = request.get_json()
     user.first_name=request_body["first_name"]
     user.last_name=request_body["last_name"]
-    user.pronouns=request_body["pronouns"]
     user.cohort=request_body["cohort"]
-    user.location_name=request_body["location"]
-    user.location_lat=request_body["location_lat"]
-    user.location_lng=request_body["location_lng"]
+    user.location_name=request_body["location_name"]
     user.email=request_body["email"]
     user.password=request_body["password"]
-    user.company=request_body["company"]
-    user.linkedin=request_body["linkedin"]
-    user.job_title=request_body["job_title"]
-    user.salary=request_body["salary"]
-    user.years_experience=request_body["years_experience"]
-    user.include_name_salary=request_body["include_name_salary"]
-    user.user_last_updated=request_body["user_last_updated"]
+    user.profile_pic_url=request_body["profile_pic_url"]
+
+    if user.pronouns:
+        user.pronouns=request_body["pronouns"]
+    if user.location_lat:
+        user.location_lat=request_body["location_lat"]
+    if user.location_lng:
+        user.location_lng=request_body["location_lng"]
+    if user.company:
+        user.company=request_body["company"]
+    if user.linkedin:
+        user.linkedin=request_body["linkedin"]
+    if user.job_title:
+        user.job_title=request_body["job_title"]
+    if user.salary:
+        user.salary=request_body["salary"]
+    if user.years_experience:
+        user.years_experience=request_body["years_experience"]
+    if user.include_name_salary:
+        user.include_name_salary=request_body["include_name_salary"]
 
     db.session.commit()
 

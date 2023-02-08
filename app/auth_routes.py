@@ -22,6 +22,7 @@ def validate_complete_new_user_request(request_body):
             request_body["location_name"],
             request_body["email"],
             request_body["password"],
+            request_body["profile_pic_url"],
             request_body["include_name_salary"]
             }:
             return request_body
@@ -81,7 +82,7 @@ def user_login():
     valid_user = validate_returning_user(User, valid_data["email"])    
 
     if bcrypt.check_password_hash(valid_user.password, valid_data["password"]):
-        return f"Welcome back {valid_user.first_name}"
+        return jsonify(valid_user.id)
     else:
         return "Incorrect password"
 

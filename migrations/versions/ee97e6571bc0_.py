@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: a47829eca42c
+Revision ID: ee97e6571bc0
 Revises: 
-Create Date: 2023-02-04 17:12:32.904019
+Create Date: 2023-02-08 00:47:03.775361
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a47829eca42c'
+revision = 'ee97e6571bc0'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,13 +22,23 @@ def upgrade():
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('description', sa.String(), nullable=False),
-    sa.Column('location_address', sa.String(), nullable=False),
-    sa.Column('location_lat', sa.Numeric(precision=8, scale=6), nullable=True),
-    sa.Column('location_lng', sa.Numeric(precision=9, scale=6), nullable=True),
-    sa.Column('organizer_first_name', sa.String(), nullable=False),
-    sa.Column('organizer_last_name', sa.String(), nullable=False),
-    sa.Column('organizer_email', sa.String(), nullable=False),
+    sa.Column('image_url', sa.String(), nullable=False),
+    sa.Column('date_time_start', sa.String(), nullable=False),
+    sa.Column('date_time_stop', sa.String(), nullable=False),
+    sa.Column('timezone', sa.String(), nullable=False),
+    sa.Column('video_conf_link', sa.String(), nullable=True),
+    sa.Column('meeting_key', sa.String(), nullable=True),
+    sa.Column('radio_selection', sa.String(), nullable=False),
+    sa.Column('is_map_showing', sa.String(), nullable=True),
+    sa.Column('location_address', sa.String(), nullable=True),
+    sa.Column('location_lat', sa.String(), nullable=True),
+    sa.Column('location_lng', sa.String(), nullable=True),
+    sa.Column('organizer_first_name', sa.String(), nullable=True),
+    sa.Column('organizer_last_name', sa.String(), nullable=True),
+    sa.Column('organizer_pronouns', sa.String(), nullable=True),
+    sa.Column('organizer_email', sa.String(), nullable=True),
     sa.Column('target_audience', sa.String(), nullable=False),
+    sa.Column('created_by', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user',
@@ -42,6 +52,7 @@ def upgrade():
     sa.Column('location_lng', sa.String(), nullable=True),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
+    sa.Column('profile_pic_url', sa.String(), nullable=False),
     sa.Column('company', sa.String(), nullable=True),
     sa.Column('linkedin', sa.String(), nullable=True),
     sa.Column('job_title', sa.String(), nullable=True),
