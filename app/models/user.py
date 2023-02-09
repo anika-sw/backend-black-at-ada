@@ -13,7 +13,7 @@ class User(db.Model):
     location_lng = db.Column(db.String, nullable=True)
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
-    profile_pic_url = db.Column(db.String, nullable=False)
+    profile_pic_url = db.Column(db.String, nullable=True)
     company = db.Column(db.String, nullable=True)
     linkedin = db.Column(db.String, nullable=True)
     job_title = db.Column(db.String, nullable=True)
@@ -72,7 +72,7 @@ class User(db.Model):
             location_lng=data["location_lng"],
             email=data["email"],
             password=data["password"],
-            profile_pic_url=data["profile_pic_url"],
+            # profile_pic_url=data["profile_pic_url"],
             company=data["company"],
             linkedin=data["linkedin"],
             job_title=data["job_title"],

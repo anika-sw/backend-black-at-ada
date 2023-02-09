@@ -35,9 +35,11 @@ def create_app(config=None):
     from .user_routes import users_bp
     from .event_routes import events_bp
     from .auth_routes import auth_bp
+    from .image_routes import image_bp
     app.register_blueprint(users_bp)
     app.register_blueprint(events_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(image_bp)
 
     CORS(app)
     return app
