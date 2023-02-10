@@ -20,7 +20,7 @@ class Event(db.Model):
     organizer_pronouns = db.Column(db.String, nullable=True) #need to make sure to control for case
     organizer_email = db.Column(db.String, nullable=True) #need to make sure to control for case
     target_audience = db.Column(db.String, nullable=False)
-    created_by = db.Column(db.Integer, nullable=False)
+    created_by_id = db.Column(db.Integer, nullable=False)
     users = db.relationship("User", secondary="event_user", back_populates="events")
 
 
@@ -34,6 +34,7 @@ class Event(db.Model):
             "date_time_stop": self.date_time_stop,
             "timezone": self.timezone,
             "target_audience": self.target_audience,
+            "created_by_id": self.created_by_id
         }
         if self.video_conf_link:
             event_dict["video_conf_link"] = self.video_conf_link
@@ -80,5 +81,5 @@ class Event(db.Model):
             organizer_pronouns=data["organizer_pronouns"],
             organizer_email=data["organizer_email"],
             target_audience=data["target_audience"],
-            created_by=data["created_by"]
+            created_by_id=data["created_by_id"]
         )

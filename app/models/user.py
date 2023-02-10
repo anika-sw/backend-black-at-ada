@@ -1,6 +1,5 @@
 from app import db
 from sqlalchemy.sql import func
-from flask_bcrypt import bcrypt
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
@@ -72,7 +71,7 @@ class User(db.Model):
             location_lng=data["location_lng"],
             email=data["email"],
             password=data["password"],
-            # profile_pic_url=data["profile_pic_url"],
+            profile_pic_url=data["profile_pic_url"],
             company=data["company"],
             linkedin=data["linkedin"],
             job_title=data["job_title"],
