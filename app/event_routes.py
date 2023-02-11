@@ -5,6 +5,7 @@ import requests
 from app.models.user import User
 from app.models.event import Event
 from datetime import datetime
+import reverse_geocoder as rg
 
 events_bp = Blueprint('events', __name__, url_prefix="/events")
 
@@ -147,3 +148,16 @@ def event_delete(event_id):
     db.session.commit()
 
     return make_response({'details': f'{event.title} successfully deleted'}, 200)
+
+
+@events_bp.route("/<event_id>/locale", methods=["GET"])
+def get_event_locale(event_id):
+    event = validate_model_id(Event, event_id)
+
+    lat = float(event.location_lat)
+    lng = float(event.location_lng)
+
+    coordinates = (lat, lng)
+    results = rg.search(coordinates)
+
+    return {"locale": tuple(results)}

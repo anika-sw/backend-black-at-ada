@@ -1,4 +1,5 @@
 from app import db
+from sqlalchemy.sql import func
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
@@ -21,6 +22,7 @@ class Event(db.Model):
     organizer_email = db.Column(db.String, nullable=True) #need to make sure to control for case
     target_audience = db.Column(db.String, nullable=False)
     created_by_id = db.Column(db.Integer, nullable=False)
+    date_time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
     users = db.relationship("User", secondary="event_user", back_populates="events")
 
 
