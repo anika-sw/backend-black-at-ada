@@ -63,17 +63,27 @@ def read_one_event(event_id):
     }
     return make_response(jsonify(event_response), 200)
 
-@events_bp.route("/<event_id>", methods=["PUT"])
-def update_event_entire_entry(event_id):
+@events_bp.route("/<event_id>", methods=["PATCH"])
+def update_event(event_id):
     event = validate_model_id(Event, event_id)
     request_body = request.get_json()
+
     event.title = request_body["title"]
     event.description = request_body["description"]
-    # event.date = request_body["date"]
-    # event.time = request_body["time"]
-    event.location = request_body["location"]
+    event.image_url = request_body["image_url"]
+    event.date_time_start = request_body["date_time_start"]
+    event.date_time_stop = request_body["date_time_stop"]
+    event.timezone = request_body["timezone"]
+    event.video_conf_link = request_body["video_conf_link"]
+    event.meeting_key = request_body["meeting_key"]
+    event.radio_selection = request_body["radio_selection"]
+    event.is_map_showing = request_body["is_map_showing"]
+    event.location_address = request_body["location_address"]
+    event.location_lat = request_body["location_lat"]
+    event.location_lng = request_body["location_lng"]
     event.organizer_first_name = request_body["organizer_first_name"]
     event.organizer_last_name = request_body["organizer_last_name"]
+    event.organizer_pronouns = request_body["organizer_pronouns"]
     event.organizer_email = request_body["organizer_email"]
     event.target_audience = request_body["target_audience"]
 
@@ -84,70 +94,37 @@ def update_event_entire_entry(event_id):
     }
     return make_response((event_response), 200)
 
-# @events_bp.route("/<event_id>", methods=["PATCH"])
-# def update_event_partial_entry(event_id):
-#     event = validate_model_id(event, event_id)
-#     request_body = request.get_json()
-#     event.title = request_body["title"]
-#     event.description = request_body["description"]
-#     # event.date = request_body["date"]
-#     # event.time = request_body["time"]
-#     event.location = request_body["location"]
-#     event.organizer_first_name = request_body["organizer_first_name"]
-#     event.organizer_last_name = request_body["organizer_last_name"]
-#     event.organizer_email = request_body["organizer_email"]
-#     event.target_audience = request_body["target_audience"]
-#     event.attendees = request_body["attendees"]
-
-#     db.session.commit()
-
-#     event_response = {
-#         "event": event.to_dict()
-#     }
-#     return make_response((event_response), 200)
 
 @events_bp.route("/<event_id>/users", methods=["POST"])
-def update_event_attendees(event_id):
+def user_rsvp_yes(event_id):
     event = validate_model_id(Event, event_id)
     request_body = request.get_json()
 
-    for user_id in request_body["user_ids"]:
-        user = validate_model_id(User, user_id)
-        event.users.append(user)
-        db.session.commit()
+    user = validate_model_id(User, request_body["user_id"])
+    event.users.append(user)
+    db.session.commit()
 
     event_response = {
         "id": event.id,
-        "user_ids": request_body["user_ids"]
+        "user_id": request_body["user_id"]
     }
     return make_response(jsonify(event_response), 200)
 
 
-@events_bp.route("/<event_id>/users", methods=["DELETE"]) #should this be delete or patch?
-def delete_event_attendee(event_id):
+@events_bp.route("/<event_id>/users", methods=["PATCH"])
+def user_rsvp_no(event_id):
     event = validate_model_id(Event, event_id)
     request_body = request.get_json()
 
-    # for user_id in request_body["user_ids"]:
-    #     user = validate_model_id(user, user_id)
-    #     event.users.append(user)
-    #     db.session.commit()
-
-    # event_response = {
-    #     "id": event.id,
-    #     "user_ids": request_body["user_ids"]
-    # }
-    return make_response(jsonify(event_response), 200)
-
-
-@events_bp.route("/<event_id>", methods=["DELETE"])
-def event_delete(event_id):
-    event = validate_model_id(Event, event_id)
-
-    db.session.delete(event)
+    user = validate_model_id(User, request_body["user_id"])
+    event.users.remove(user)
     db.session.commit()
 
-    return make_response({'details': f'{event.title} successfully deleted'}, 200)
+    event_response = {
+        "id": event.id,
+        "user_id": f'User {request_body["user_id"]} successfully deleted'
+    }
+    return make_response(jsonify(event_response), 200)
 
 
 @events_bp.route("/<event_id>/locale", methods=["GET"])
@@ -161,3 +138,13 @@ def get_event_locale(event_id):
     results = rg.search(coordinates)
 
     return {"locale": tuple(results)}
+
+
+@events_bp.route("/<event_id>", methods=["DELETE"])
+def event_delete(event_id):
+    event = validate_model_id(Event, event_id)
+
+    db.session.delete(event)
+    db.session.commit()
+
+    return make_response({'details': f'{event.title} successfully deleted'}, 200)

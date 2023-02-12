@@ -49,23 +49,6 @@ def read_all_users():
     #     user_query = User.db.session.query(User).filter(func.ST_DWithin(User.geoLoc, geo, meters)).order_by(func.ST_Distance(User.geoLoc, geo))
 
     users = user_query
-
-    users_response = [user.to_dict() for user in users]
-
-    return make_response(jsonify(users_response), 200)
-
-@users_bp.route("", methods=["GET"])
-def read_users_near_one_user(user_id):
-    user = validate_model_id(User, user_id)
-    sort_query = request.args.get("sort")
-    # if sort_query == "nearMe":
-    #     user_query = User.query.filter(func.acos(func.sin(func.radians(user.location_lat)) 
-    #     * func.sin(func.radians(User.location_lat)) + func.cos(func.radians(user.location_lat)) 
-    #     * func.cos(func.radians(User.location_lat)) * func.cos(func.radians(User.location_lng) 
-    #     - (func.radians(user_id.location_lng)))) * 6371 <= 80)
-
-    users = user_query
-
     users_response = [user.to_dict() for user in users]
 
     return make_response(jsonify(users_response), 200)
@@ -79,11 +62,12 @@ def read_one_user(user_id):
     }
     return make_response(jsonify(user_response), 200)
 
+
 @users_bp.route("/<user_id>", methods=["PATCH"])
 def update_user_entry(user_id):
     user = validate_model_id(User, user_id)
     request_body = request.get_json()
-    
+
     user.first_name = request_body["first_name"]
     user.last_name = request_body["last_name"]
     user.cohort = request_body["cohort"]
@@ -111,34 +95,22 @@ def update_user_entry(user_id):
         "user": user.to_dict()
     }
     return make_response((user_response), 200)
-    
 
-@users_bp.route("/<user_id>", methods=["PATCH"])
-def user_rsvp_yes(user_id):
+
+@users_bp.route("/<user_id>/event-drafts", methods=["POST"])
+def save_event_draft(user_id):
     user = validate_model_id(User, user_id)
     request_body = request.get_json()
-    user.event_id += request_body["event_id"]
 
+    user.draft_data.append(request_body)
     db.session.commit()
 
-    user_response = {
-        "user": user.to_dict()
+    event_draft_response = {
+        "user": user.id,
+        "title": request_body["title"]
     }
-    return make_response((user_response), 200)
 
-
-@users_bp.route("/<user_id>", methods=["PATCH"])
-def user_rsvp_no(user_id):
-    user = validate_model_id(User, user_id)
-    request_body = request.get_json()
-    user.event_id -= request_body["event_id"]
-
-    db.session.commit()
-
-    user_response = {
-        "user": user.to_dict()
-    }
-    return make_response((user_response), 200)
+    return make_response(jsonify(event_draft_response), 200)
 
 
 @users_bp.route("/<user_id>", methods=["DELETE"])

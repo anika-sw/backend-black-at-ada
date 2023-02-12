@@ -13,13 +13,13 @@ class Event(db.Model):
     meeting_key = db.Column(db.String, nullable=True)
     radio_selection = db.Column(db.String, nullable=False)
     is_map_showing = db.Column(db.String, nullable=True)
-    location_address = db.Column(db.String, nullable=True) #need to make sure to control for case
+    location_address = db.Column(db.String, nullable=True)
     location_lat = db.Column(db.String, nullable=True)
     location_lng = db.Column(db.String, nullable=True)
-    organizer_first_name = db.Column(db.String, nullable=True) #need to make sure to control for case
-    organizer_last_name = db.Column(db.String, nullable=True) #need to make sure to control for case
-    organizer_pronouns = db.Column(db.String, nullable=True) #need to make sure to control for case
-    organizer_email = db.Column(db.String, nullable=True) #need to make sure to control for case
+    organizer_first_name = db.Column(db.String, nullable=True) 
+    organizer_last_name = db.Column(db.String, nullable=True) 
+    organizer_pronouns = db.Column(db.String, nullable=True) 
+    organizer_email = db.Column(db.String, nullable=True) 
     target_audience = db.Column(db.String, nullable=False)
     created_by_id = db.Column(db.Integer, nullable=False)
     date_time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
@@ -51,7 +51,7 @@ class Event(db.Model):
         if self.location_lat:
             event_dict["location_lat"] = self.location_lat
         if self.location_lng:
-            event_dict["location_lat"] = self.location_lng
+            event_dict["location_lng"] = self.location_lng
         if self.organizer_first_name:
             event_dict["organizer_first_name"] = self.organizer_first_name
         if self.organizer_last_name:

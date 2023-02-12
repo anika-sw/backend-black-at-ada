@@ -19,6 +19,7 @@ class User(db.Model):
     salary = db.Column(db.Integer, nullable=True)
     years_experience = db.Column(db.String, nullable=True)
     include_name_salary = db.Column(db.String, nullable=False)
+    draft_data = db.Column(db.String, nullable=True)
     user_first_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
     user_last_updated = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     events = db.relationship("Event", secondary="event_user", back_populates="users")

@@ -25,13 +25,8 @@ def upload_image_to_cloud_storage():
     blob.content_type = uploaded_file.content_type
     blob.upload_from_file(uploaded_file)
 
-    return blob.public_url
-
-
-    db.session.add(new_user)
-    db.session.commit()
-
-    user_response = {
-        "user": new_user.to_dict()
+    image_response = {
+        "url": blob.public_url
     }
-    return make_response(jsonify(user_response), 201) 
+    
+    return make_response(jsonify(image_response), 201) 
