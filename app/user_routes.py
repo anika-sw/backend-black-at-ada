@@ -97,22 +97,6 @@ def update_user_entry(user_id):
     return make_response((user_response), 200)
 
 
-@users_bp.route("/<user_id>/event-drafts", methods=["POST"])
-def save_event_draft(user_id):
-    user = validate_model_id(User, user_id)
-    request_body = request.get_json()
-
-    user.draft_data.append(request_body)
-    db.session.commit()
-
-    event_draft_response = {
-        "user": user.id,
-        "title": request_body["title"]
-    }
-
-    return make_response(jsonify(event_draft_response), 200)
-
-
 @users_bp.route("/<user_id>", methods=["DELETE"])
 def user_delete(user_id):
     user = validate_model_id(User, user_id)

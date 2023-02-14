@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ee97e6571bc0
+Revision ID: 8808f72c3b5b
 Revises: 
-Create Date: 2023-02-08 00:47:03.775361
+Create Date: 2023-02-12 13:48:45.810187
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ee97e6571bc0'
+revision = '8808f72c3b5b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,8 +23,8 @@ def upgrade():
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('description', sa.String(), nullable=False),
     sa.Column('image_url', sa.String(), nullable=False),
-    sa.Column('date_time_start', sa.String(), nullable=False),
-    sa.Column('date_time_stop', sa.String(), nullable=False),
+    sa.Column('date_time_start', sa.DateTime(), nullable=False),
+    sa.Column('date_time_stop', sa.DateTime(), nullable=False),
     sa.Column('timezone', sa.String(), nullable=False),
     sa.Column('video_conf_link', sa.String(), nullable=True),
     sa.Column('meeting_key', sa.String(), nullable=True),
@@ -38,7 +38,8 @@ def upgrade():
     sa.Column('organizer_pronouns', sa.String(), nullable=True),
     sa.Column('organizer_email', sa.String(), nullable=True),
     sa.Column('target_audience', sa.String(), nullable=False),
-    sa.Column('created_by', sa.Integer(), nullable=False),
+    sa.Column('created_by_id', sa.Integer(), nullable=False),
+    sa.Column('date_time_created', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user',
@@ -52,13 +53,14 @@ def upgrade():
     sa.Column('location_lng', sa.String(), nullable=True),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
-    sa.Column('profile_pic_url', sa.String(), nullable=False),
+    sa.Column('profile_pic_url', sa.String(), nullable=True),
     sa.Column('company', sa.String(), nullable=True),
     sa.Column('linkedin', sa.String(), nullable=True),
     sa.Column('job_title', sa.String(), nullable=True),
     sa.Column('salary', sa.Integer(), nullable=True),
     sa.Column('years_experience', sa.String(), nullable=True),
     sa.Column('include_name_salary', sa.String(), nullable=False),
+    sa.Column('draft_data', sa.String(), nullable=True),
     sa.Column('user_first_created', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('user_last_updated', sa.DateTime(timezone=True), nullable=True),
     sa.PrimaryKeyConstraint('id')

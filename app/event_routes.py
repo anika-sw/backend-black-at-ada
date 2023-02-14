@@ -5,6 +5,7 @@ import requests
 from app.models.user import User
 from app.models.event import Event
 from datetime import datetime
+from sqlalchemy.sql import func
 import reverse_geocoder as rg
 
 events_bp = Blueprint('events', __name__, url_prefix="/events")
@@ -49,7 +50,15 @@ def create_event():
 
 @events_bp.route("", methods=["GET"])
 def read_all_events():
-    events = Event.query.all()
+    event_query = Event.query.filter(Event.date_time_start >= func.now()).order_by(Event.date_time_start.asc())
+    sort_query = request.args.get("sort")
+    if sort_query == "dateTimeCreated":
+        event_query = Event.query.order_by(Event.date_time_created.desc())
+    if sort_query == "past":
+        event_query = Event.query.filter(Event.date_time_start <= func.now()).order_by(Event.date_time_start.desc())
+
+
+    events = event_query
     events_response = [event.to_dict() for event in events]
 
     return make_response(jsonify(events_response), 200)
@@ -106,8 +115,11 @@ def user_rsvp_yes(event_id):
 
     event_response = {
         "id": event.id,
-        "user_id": request_body["user_id"]
+        "attending": True,
+        "total_rsvp": len(event.users)
     }
+    print(event_response)
+
     return make_response(jsonify(event_response), 200)
 
 
@@ -122,7 +134,9 @@ def user_rsvp_no(event_id):
 
     event_response = {
         "id": event.id,
-        "user_id": f'User {request_body["user_id"]} successfully deleted'
+        "attending": False,
+        "total_rsvp": len(event.users),
+        "user_id": f'User {request_body["user_id"]} successfully removed from event'
     }
     return make_response(jsonify(event_response), 200)
 

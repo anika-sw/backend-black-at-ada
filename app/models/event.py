@@ -6,8 +6,8 @@ class Event(db.Model):
     title = db.Column(db.String, nullable=False) #limit characters
     description = db.Column(db.String, nullable=False) #limit characters
     image_url = db.Column(db.String, nullable=False)
-    date_time_start = db.Column(db.String, nullable=False)
-    date_time_stop = db.Column(db.String, nullable=False)
+    date_time_start = db.Column(db.DateTime(timezone=False), nullable=False)
+    date_time_stop = db.Column(db.DateTime(timezone=False), nullable=False)
     timezone = db.Column(db.String, nullable=False)
     video_conf_link = db.Column(db.String, nullable=True)
     meeting_key = db.Column(db.String, nullable=True)
@@ -22,7 +22,7 @@ class Event(db.Model):
     organizer_email = db.Column(db.String, nullable=True) 
     target_audience = db.Column(db.String, nullable=False)
     created_by_id = db.Column(db.Integer, nullable=False)
-    date_time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    date_time_created = db.Column(db.DateTime(timezone=False), server_default=func.now())
     users = db.relationship("User", secondary="event_user", back_populates="events")
 
 
@@ -60,6 +60,8 @@ class Event(db.Model):
             event_dict["organizer_pronouns"] = self.organizer_pronouns
         if self.organizer_email:
             event_dict["organizer_email"] = self.organizer_email
+        if self.users:
+            event_dict["users"] = self.users
         return event_dict
 
     @classmethod
