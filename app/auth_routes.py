@@ -13,7 +13,7 @@ from flask_bcrypt import Bcrypt
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
-auth_bp = Blueprint("", __name__, url_prefix="")
+auth_bp = Blueprint("/", __name__, url_prefix="/")
 
 def validate_complete_new_user_request(request_body):
     try:
