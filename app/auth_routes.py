@@ -24,7 +24,7 @@ def validate_complete_new_user_request(request_body):
             request_body["location_name"],
             request_body["email"],
             request_body["password"],
-            request_body["profile_pic_url"],
+            request_body["profile_pic_file"],
             request_body["include_name_salary"]
             }:
             return request_body

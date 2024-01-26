@@ -11,8 +11,7 @@ class Event(db.Model):
     timezone = db.Column(db.String, nullable=False)
     video_conf_link = db.Column(db.String, nullable=True)
     meeting_key = db.Column(db.String, nullable=True)
-    radio_selection = db.Column(db.String, nullable=False)
-    is_map_showing = db.Column(db.String, nullable=True)
+    online_in_person = db.Column(db.String, nullable=False)
     location_address = db.Column(db.String, nullable=True)
     location_lat = db.Column(db.String, nullable=True)
     location_lng = db.Column(db.String, nullable=True)
@@ -42,10 +41,8 @@ class Event(db.Model):
             event_dict["video_conf_link"] = self.video_conf_link
         if self.meeting_key:
             event_dict["meeting_key"] = self.meeting_key
-        if self.radio_selection:
-            event_dict["radio_selection"] = self.radio_selection
-        if self.is_map_showing:
-            event_dict["is_map_showing"] = self.is_map_showing
+        if self.online_in_person:
+            event_dict["online_in_person"] = self.online_in_person
         if self.location_address:
             event_dict["location_address"] = self.location_address
         if self.location_lat:
@@ -75,8 +72,7 @@ class Event(db.Model):
             timezone=data["timezone"],
             video_conf_link=data["video_conf_link"],
             meeting_key=data["meeting_key"],
-            radio_selection=data["radio_selection"],
-            is_map_showing=data["is_map_showing"],
+            online_in_person=data["online_in_person"],
             location_address=data["location_address"],
             location_lat=data["location_lat"],
             location_lng=data["location_lng"],

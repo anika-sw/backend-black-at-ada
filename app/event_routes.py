@@ -12,11 +12,12 @@ events_bp = Blueprint('events', __name__, url_prefix="/events")
 
 def validate_complete_request(request_body):
     try:
-        if not "" in request_body:
+        if "title" in request_body:
+            print(request_body)
             return request_body
 
     except:
-        abort(make_response({"details": "Invalid data"}, 400))
+        abort(make_response({"details": "Missing required data"}, 400))
 
 
 def validate_model_id(cls, model_id):
@@ -36,6 +37,7 @@ def validate_model_id(cls, model_id):
 @events_bp.route("", methods=["POST"])
 def create_event():
     request_body = request.get_json()
+    print(request_body)
     valid_data = validate_complete_request(request_body)
     new_event = Event.from_dict(valid_data)
 
@@ -85,8 +87,7 @@ def update_event(event_id):
     event.timezone = request_body["timezone"]
     event.video_conf_link = request_body["video_conf_link"]
     event.meeting_key = request_body["meeting_key"]
-    event.radio_selection = request_body["radio_selection"]
-    event.is_map_showing = request_body["is_map_showing"]
+    event.online_in_person = request_body["online_in_person"]
     event.location_address = request_body["location_address"]
     event.location_lat = request_body["location_lat"]
     event.location_lng = request_body["location_lng"]
@@ -141,17 +142,17 @@ def user_rsvp_no(event_id):
     return make_response(jsonify(event_response), 200)
 
 
-@events_bp.route("/<event_id>/locale", methods=["GET"])
-def get_event_locale(event_id):
-    event = validate_model_id(Event, event_id)
+# @events_bp.route("/<event_id>/locale", methods=["GET"])
+# def get_event_locale(event_id):
+#     event = validate_model_id(Event, event_id)
 
-    lat = float(event.location_lat)
-    lng = float(event.location_lng)
+#     lat = float(event.location_lat)
+#     lng = float(event.location_lng)
 
-    coordinates = (lat, lng)
-    results = rg.search(coordinates)
+#     coordinates = (lat, lng)
+#     results = rg.search(coordinates)
 
-    return {"locale": tuple(results)}
+#     return {"locale": tuple(results)}
 
 
 @events_bp.route("/<event_id>", methods=["DELETE"])

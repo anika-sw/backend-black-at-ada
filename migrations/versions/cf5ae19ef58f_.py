@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: bec612b1b087
+Revision ID: cf5ae19ef58f
 Revises: 
-Create Date: 2023-02-14 13:49:04.890038
+Create Date: 2023-02-23 01:35:36.499253
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'bec612b1b087'
+revision = 'cf5ae19ef58f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,12 +24,11 @@ def upgrade():
     sa.Column('description', sa.String(), nullable=False),
     sa.Column('image_url', sa.String(), nullable=False),
     sa.Column('date_time_start', sa.DateTime(), nullable=False),
-    sa.Column('date_time_stop', sa.DateTime(), nullable=False),
+    sa.Column('date_time_stop', sa.DateTime(), nullable=True),
     sa.Column('timezone', sa.String(), nullable=False),
     sa.Column('video_conf_link', sa.String(), nullable=True),
     sa.Column('meeting_key', sa.String(), nullable=True),
-    sa.Column('radio_selection', sa.String(), nullable=False),
-    sa.Column('is_map_showing', sa.String(), nullable=True),
+    sa.Column('online_in_person', sa.String(), nullable=False),
     sa.Column('location_address', sa.String(), nullable=True),
     sa.Column('location_lat', sa.String(), nullable=True),
     sa.Column('location_lng', sa.String(), nullable=True),
@@ -53,7 +52,7 @@ def upgrade():
     sa.Column('location_lng', sa.String(), nullable=True),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
-    sa.Column('profile_pic_url', sa.String(), nullable=True),
+    sa.Column('profile_pic_file', sa.String(), nullable=True),
     sa.Column('company', sa.String(), nullable=True),
     sa.Column('linkedin', sa.String(), nullable=True),
     sa.Column('job_title', sa.String(), nullable=True),

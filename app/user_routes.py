@@ -75,7 +75,7 @@ def update_user_entry(user_id):
     user.location_lat = request_body["location_lat"]
     user.location_lng = request_body["location_lng"]
     user.email = request_body["email"]
-    user.profile_pic_url = request_body["profile_pic_url"]
+    user.profile_pic_file = request_body["profile_pic_file"]
     user.pronouns = request_body["pronouns"]
     user.company = request_body["company"]
     user.linkedin = request_body["linkedin"]
