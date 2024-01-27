@@ -6,9 +6,9 @@ from app.models.user import User
 from app.models.event import Event
 from datetime import datetime
 from sqlalchemy.sql import func
-import reverse_geocoder as rg
 
 events_bp = Blueprint('events', __name__, url_prefix="/events")
+
 
 def validate_complete_request(request_body):
     try:
@@ -142,17 +142,16 @@ def user_rsvp_no(event_id):
     return make_response(jsonify(event_response), 200)
 
 
-# @events_bp.route("/<event_id>/locale", methods=["GET"])
-# def get_event_locale(event_id):
-#     event = validate_model_id(Event, event_id)
+@events_bp.route("/<event_id>/latlng", methods=["GET"])
+def get_event_locale(event_id):
+    event = validate_model_id(Event, event_id)
 
-#     lat = float(event.location_lat)
-#     lng = float(event.location_lng)
+    lat = float(event.location_lat)
+    lng = float(event.location_lng)
 
-#     coordinates = (lat, lng)
-#     results = rg.search(coordinates)
+    coordinates = (lat,lng)
 
-#     return {"locale": tuple(results)}
+    return {"coordinates": tuple(coordinates)}
 
 
 @events_bp.route("/<event_id>", methods=["DELETE"])
