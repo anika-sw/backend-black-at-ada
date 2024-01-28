@@ -9,11 +9,9 @@ from sqlalchemy.sql import func
 
 events_bp = Blueprint('events', __name__, url_prefix="/events")
 
-
 def validate_complete_request(request_body):
     try:
         if "title" in request_body:
-            print(request_body)
             return request_body
 
     except:
@@ -54,7 +52,7 @@ def create_event():
 def read_all_events():
     event_query = Event.query.filter(Event.date_time_start >= func.now()).order_by(Event.date_time_start.asc())
     sort_query = request.args.get("sort")
-    if sort_query == "dateTimeCreated":
+    if sort_query == "date_time_created":
         event_query = Event.query.order_by(Event.date_time_created.desc())
     if sort_query == "past":
         event_query = Event.query.filter(Event.date_time_start <= func.now()).order_by(Event.date_time_start.desc())
@@ -78,6 +76,8 @@ def read_one_event(event_id):
 def update_event(event_id):
     event = validate_model_id(Event, event_id)
     request_body = request.get_json()
+
+    print(event)
 
     event.title = request_body["title"]
     event.description = request_body["description"]

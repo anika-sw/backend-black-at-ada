@@ -55,8 +55,7 @@ class User(db.Model):
         if self.years_experience:
             user_dict["years_experience"] = self.years_experience
         if self.events:
-            event_titles = [event.title for event in self.events]
-            user_dict["events"] = event_titles
+            user_dict["events"] = [event.id for event in self.events]
         return user_dict
 
     @classmethod

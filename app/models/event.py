@@ -34,31 +34,20 @@ class Event(db.Model):
             "date_time_start": self.date_time_start,
             "date_time_stop": self.date_time_stop,
             "timezone": self.timezone,
+            "video_conf_link": self.video_conf_link,
+            "meeting_key": self.meeting_key,
+            "online_in_person": self.online_in_person,
+            "location_address": self.location_address,
+            "location_lat": self.location_lat,
+            "location_lng": self.location_lng,
+            "organizer_first_name": self.organizer_first_name, 
+            "organizer_last_name": self.organizer_last_name, 
+            "organizer_pronouns": self.organizer_pronouns, 
+            "organizer_email": self.organizer_email, 
             "target_audience": self.target_audience,
             "created_by_id": self.created_by_id
         }
-        if self.video_conf_link:
-            event_dict["video_conf_link"] = self.video_conf_link
-        if self.meeting_key:
-            event_dict["meeting_key"] = self.meeting_key
-        if self.online_in_person:
-            event_dict["online_in_person"] = self.online_in_person
-        if self.location_address:
-            event_dict["location_address"] = self.location_address
-        if self.location_lat:
-            event_dict["location_lat"] = self.location_lat
-        if self.location_lng:
-            event_dict["location_lng"] = self.location_lng
-        if self.organizer_first_name:
-            event_dict["organizer_first_name"] = self.organizer_first_name
-        if self.organizer_last_name:
-            event_dict["organizer_last_name"] = self.organizer_last_name
-        if self.organizer_pronouns:
-            event_dict["organizer_pronouns"] = self.organizer_pronouns
-        if self.organizer_email:
-            event_dict["organizer_email"] = self.organizer_email
-        if self.users:
-            event_dict["users"] = self.users
+        event_dict["users"] = [user.id for user in self.users] if self.users else []
         return event_dict
 
     @classmethod
