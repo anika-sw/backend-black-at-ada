@@ -8,6 +8,9 @@ from app.models.user import User
 from app.models.event import Event
 from google.cloud import storage
 
+gcp_storage_auth = os.environ.get("image_upload_sa.json")
+gcp_storage_auth_json = jsonify(gcp_storage_auth)
+
 
 image_bp = Blueprint("images", __name__, url_prefix="/images")
 
@@ -15,7 +18,7 @@ image_bp = Blueprint("images", __name__, url_prefix="/images")
 def upload_image_to_cloud_storage():
     uploaded_file = request.files.get("image")
     org_filename = uploaded_file.filename
-    storage_client = storage.Client.from_service_account_json(os.environ.get("image_upload_sa.json"))
+    storage_client = storage.Client.from_service_account_json(gcp_storage_auth_json)
     bucket_name = os.environ.get("GCP_STORAGE_BUCKET_NAME")
     bucket = storage_client.bucket(bucket_name)
     file_extension = org_filename.split('.').pop()
