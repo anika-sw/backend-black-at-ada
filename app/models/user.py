@@ -32,7 +32,6 @@ class User(db.Model):
             "cohort": self.cohort,
             "location_name": self.location_name,
             "email": self.email,
-            "password": self.password,
             "profile_pic_file": self.profile_pic_file,
             "include_name_salary": self.include_name_salary,
             "user_first_created": self.user_first_created,

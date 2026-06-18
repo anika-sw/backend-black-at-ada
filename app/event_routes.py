@@ -24,7 +24,7 @@ def validate_model_id(cls, model_id):
     except:
         abort(make_response({"details": "Invalid data"}, 404))
 
-    model = cls.query.get(model_id)
+    model = db.session.get(cls, model_id)
 
     if not model:
         abort(make_response({"details": "Invalid data"}, 404))

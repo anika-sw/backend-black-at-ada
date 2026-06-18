@@ -1,16 +1,6 @@
-from sqlalchemy import func
-from flask import Flask, Blueprint, request, jsonify, make_response, abort
-from app import db
-import os
-import requests
+from flask import Blueprint, request, jsonify, make_response, abort
+from app import db, bcrypt
 from app.models.user import User
-from app.models.event import Event
-from datetime import datetime
-from flask_bcrypt import Bcrypt
-
-app = Flask(__name__)
-bcrypt = Bcrypt(app)
-
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -21,7 +11,7 @@ def validate_model_id(cls, model_id):
     except:
         abort(make_response({"details": "Invalid data"}, 404))
 
-    model = cls.query.get(model_id)
+    model = db.session.get(cls, model_id)
 
     if not model:
         abort(make_response({"details": "Invalid data"}, 404))

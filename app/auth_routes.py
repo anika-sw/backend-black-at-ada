@@ -1,17 +1,9 @@
 from sqlalchemy import func
-from flask import Flask, Blueprint, request, jsonify, make_response, abort
-from app import db
+from flask import Blueprint, request, jsonify, make_response, abort
+from app import db, bcrypt
 import os
-import requests
 from app.models.user import User
-from app.models.event import Event
 from datetime import datetime
-from flask_bcrypt import Bcrypt
-
-
-
-app = Flask(__name__)
-bcrypt = Bcrypt(app)
 
 auth_bp = Blueprint("/", __name__, url_prefix="/")
 
@@ -86,7 +78,7 @@ def user_login():
     if bcrypt.check_password_hash(valid_user.password, valid_data["password"]):
         return jsonify(valid_user.id)
     else:
-        return "Incorrect password"
+        abort(make_response({"details": "Incorrect password"}, 401))
 
 
     

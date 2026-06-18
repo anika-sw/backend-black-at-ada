@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 import os
 from flask_cors import CORS
@@ -8,6 +9,7 @@ import requests
 
 db = SQLAlchemy()
 migrate = Migrate()
+bcrypt = Bcrypt()
 load_dotenv()
 
 
@@ -28,6 +30,7 @@ def create_app(config=None):
 
     db.init_app(app)
     migrate.init_app(app, db)
+    bcrypt.init_app(app)
 
     # Register Blueprints here
     # from .routes import example_bp
